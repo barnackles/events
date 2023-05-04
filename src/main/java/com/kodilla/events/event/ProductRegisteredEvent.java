@@ -1,10 +1,14 @@
-package com.kodilla.events.domain;
+package com.kodilla.events.event;
 
-public class ProductDto {
+import org.springframework.context.ApplicationEvent;
+
+
+public class ProductRegisteredEvent extends ApplicationEvent {
     private String productName;
     private String otherData;
 
-    public ProductDto(String productName, String otherData) {
+    public ProductRegisteredEvent(Object source, String productName, String otherData) {
+        super(source);
         this.productName = productName;
         this.otherData = otherData;
     }
@@ -18,3 +22,4 @@ public class ProductDto {
     }
 
 }
+

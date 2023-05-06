@@ -5,8 +5,6 @@ import com.kodilla.events.domain.ResultDto;
 import com.kodilla.events.util.Calculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,14 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/calculator")
-public class CalculatorController implements ApplicationEventPublisherAware {
-
-    private ApplicationEventPublisher publisher;
-    private Calculator calculator;
+public class CalculatorController {
+    private final Calculator calculator;
     private static final Logger logger = LoggerFactory.getLogger(CalculatorController.class);
 
-    public CalculatorController(ApplicationEventPublisher publisher, Calculator calculator) {
-        this.publisher = publisher;
+    public CalculatorController(Calculator calculator) {
         this.calculator = calculator;
     }
 
@@ -31,24 +26,10 @@ public class CalculatorController implements ApplicationEventPublisherAware {
     public ResponseEntity<ResultDto> calculate(@RequestBody InputDto inputDto) { //should validate
         logger.info("Register input: " + inputDto.a() + inputDto.operator() + inputDto.b());
 
-    // TODO input processing logic
-
         ResultDto result = new ResultDto(calculator.selectOperation(inputDto));
-
-//        publisher.publishEvent(
-//                new ProductRegisteredEvent(
-//                        this,
-//                        productDto.getProductName(),
-//                        productDto.getOtherData()));
-
-
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 
-    @Override
-    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
-        this.publisher = applicationEventPublisher;
-    }
 }
